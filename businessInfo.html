@@ -1,0 +1,201 @@
+<div class="span8 span10-md span10-sm span12-xsm align-middle" id="save_modal">
+    <div class="form-row">
+        <form ng-submit="submitForm(businessInfo.$valid)" name="businessInfo" method="post" class="form" novalidate>
+            <div ng-hide="addlnInfo" class="form-row"
+                 ng-class="{'error' :businessInfo.registeredBusinessName.$invalid && (businessInfo.addressLine1.$touched || businessInfo.registeredBusinessName.$dirty)}">
+                <label for="onclicktip2">Registered business name</label>
+                <div class="field-group tooltip-onclick" ddh-tooltip>
+                    <input type="text" ddh-reset name="registeredBusinessName" placeholder="" class="span12" ng-pattern="/^[0-9a-zA-Z\s,+*(')#&\/ -]*$/" ng-minlength="2" maxlength="40" ng-model="data.businessInfo.registered_business_name" required>
+                    <button class="reset-field" type="button"></button>
+                    <button id="tooltipButton2" class="btn icon-tooltip tooltip-element" type="button" data-toggle="button"
+                            aria-label="ID help"></button>
+                    <div class="helpertext" id="tooltipContent2" role="tooltip">
+                        <div class="popover-content">
+                            <p>The official name of your business, as filed with your Secretary of State.</p>
+                        </div>
+                    </div>
+                </div>
+                <div aria-live="polite" aria-atomic="true" class="error-msg">
+                    <span ng-messages="businessInfo.registeredBusinessName.$error"
+                          ng-if="businessInfo.addressLine1.$touched || businessInfo.registeredBusinessName.$dirty">
+                        <span ng-message="maxlength">Business Name exceeds max length</span>
+                        <span ng-message="required">Required field</span>
+                        <span ng-message="pattern">Enter a valid Business name</span>
+                        <span ng-message="minlength">Enter a valid Business name</span>
+                    </span>
+                </div>
+            </div>
+            <div ng-if="data.businessCreditInfo.showDBA" class="form-row"
+                 ng-class="{'error' :businessInfo.dba.$invalid && businessInfo.dba.$dirty}">
+                <label for="onclicktip2">DBA(optional)</label>
+                <div class="field-group tooltip-onclick" ddh-tooltip>
+                    <input type="text" ddh-reset name="dba" id="dba" placeholder="Optional" class="span12"
+                           maxlength="60"
+                           ng-model="data.businessInfo.dba" ng-pattern="/^[a-zA-Z\s,+*(')#&\/ -]*$/">
+                    <button class="reset-field" type="button"></button>
+                    <button id="tooltipButton2" class="btn icon-tooltip tooltip-element" type="button" data-toggle="button"
+                            aria-label="ID help"></button>
+                    <div class="helpertext" id="tooltipContent2" role="tooltip">
+                        <div class="popover-content">
+                            <p>The name your business operates under. Also called “doing business as” or “DBA.”</p>
+                        </div>
+                    </div>
+                </div>
+                <div aria-live="polite" aria-atomic="true" class="error-msg">
+                    <span ng-messages="businessInfo.dba.$error" ng-if="businessInfo.dba.$dirty">
+                        <span ng-message="maxlength">DBA exceeds max length</span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-row" ng-hide="isComponentReadOnly || cart_has_bus_soln_alone_product">
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="data.address.businessAddress.useSameAddress" ng-click="chkUseSameAddress()">
+                    <i class="skin"></i>
+                    <span>Same as service address</span>
+                </label>
+            </div>
+            <div class="form-row"
+                 ng-class="{'error' :businessInfo.addressLine1.$invalid && (businessInfo.addressLine1.$touched || businessInfo.addressLine1.$dirty)}">
+                <label>Business address line 1</label>
+                <div class="field-group tooltip-onclick">
+                    <input aria-describedby="addressLine1" ddh-reset name="addressLine1"
+                           placeholder="Cannot be a P.O.Box"
+                           class="span12" ng-pattern="/^[0-9a-zA-Z](?![0-9]*$)(?!([\s|\0-9a-zA-Z. :$!]*|p[\s|\.|, ]*|post[\s|\.]*)(o[\s|\.|, ]*|office[\s|\. ]*)(box[\s|\. ]*))[a-zA-Z0-9.\\s,+*(')#&\/ -]*$/i" ng-minlength="2" maxlength="100" ng-model="data.address.businessAddress.addressLine1" type="text" aria-label="Street address" ng-readonly="data.address.businessAddress.useSameAddress" required>
+                </div>
+                <div aria-live="polite" aria-atomic="true" class="error-msg">
+                    <span ng-messages="businessInfo.addressLine1.$error"
+                          ng-if="businessInfo.addressLine1.$touched || businessInfo.addressLine1.$dirty">
+                        <span ng-message="required">Required field</span>
+                        <span ng-message="pattern">Enter a valid address</span>
+                        <span ng-message="maxlength">Address exceeds max length</span>
+                        <span ng-message="minlength">Enter a valid address</span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-row"
+                 ng-class="{'error' :businessInfo.addressLine2.$invalid && businessInfo.addressLine2.$dirty}">
+                <label>Business address line 2 (optional)</label>
+                <div class="field-group form-row">
+                    <input type="text" ddh-reset name="addressLine2"
+                           placeholder="Suite, floor, building, etc."
+                           class="span12" ng-model="data.address.businessAddress.addressLine2"
+                           ng-pattern="/^[a-zA-Z0-9][a-zA-Z0-9\\s, -//#]*$/"
+                           ng-readonly="data.address.businessAddress.useSameAddress" maxlength="100">
+                </div>
+                <div aria-live="polite" aria-atomic="true" class="error-msg">
+                    <span ng-messages="businessInfo.addressLine2.$error" ng-if="businessInfo.addressLine2.$dirty">
+                        <span ng-message="maxlength">Address exceeds max length</span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-row"
+                 ng-class="{'error' :businessInfo.city.$invalid && (businessInfo.city.$dirty || businessInfo.city.$touched)}">
+                <label>City</label>
+                <div class="field-group">
+                    <input type="text" ddh-reset name="city" placeholder="" class="span12" maxlength="25"
+                           ng-minlength="2" ng-model="data.address.businessAddress.city"
+                           ng-pattern="/^[a-zA-Z][a-zA-Z-. ]+$/"
+                           ng-readonly="data.address.businessAddress.useSameAddress" required>
+                </div>
+                <div aria-live="polite" aria-atomic="true" class="error-msg">
+                    <span ng-messages="businessInfo.city.$error"
+                          ng-if="businessInfo.city.$dirty || businessInfo.city.$touched">
+                        <span ng-message="pattern">Enter a valid city name</span>
+                        <span ng-message="maxlength">City exceeds max length</span>
+                        <span ng-message="minlength">Enter a valid city name</span>
+                        <span ng-message="required">Required field</span>
+                    </span>
+                </div>
+            </div>
+            <div class="row-nowrap">
+                <div class="form-row span6"
+                     ng-class="{'error' : businessInfo.state.$invalid && (businessInfo.state.$dirty || businessInfo.state.$touched)}">
+                    <label>State</label>
+                    <div class="field-group">
+                        <select name="state" ddh-dropdown ng-model="data.address.businessAddress.state" required
+                                ng-disabled="data.address.businessAddress.useSameAddress">
+                            <option ddh-dropdown-list option-repeat="state in states" value="{{state.id}}">{{state.text}}</option>
+                        </select>
+                    </div>
+                    <div aria-live="polite" aria-atomic="true" class="error-msg">
+                        <span ng-messages="businessInfo.state.$error"
+                              ng-if="businessInfo.state.$dirty || businessInfo.state.$touched">
+                            <span ng-message="required">Required field</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-row span6"
+                     ng-class="{'error' : businessInfo.zipCode.$invalid && (businessInfo.zipCode.$dirty || businessInfo.zipCode.$touched)}">
+                    <label>ZIP Code</label>
+                    <div class="field-group">
+                        <input type="text" name="zipCode" ng-model="data.address.businessAddress.zipCode"
+                               aria-describedby="zipCode"
+                               ng-pattern='/^\d{5}$/' placeholder="5-digit zip code" class="span12" maxlength="5"
+                               minlength="5"
+                               ddh-reset ddh-only-digits ng-readonly="data.address.businessAddress.useSameAddress" required>
+                    </div>
+                    <div aria-live="polite" aria-atomic="true" class="error-msg">
+                        <span ng-messages="businessInfo.zipCode.$error"
+                              ng-if="businessInfo.zipCode.$dirty || businessInfo.zipCode.$touched">
+                            <span ng-message="required">Required field</span>
+                            <span ng-message="pattern">Enter a valid ZIP Code</span>
+                            <span ng-message="minlength">ZIP Code is invalid</span>
+                            <span ng-message="maxlength">Zipcode should not be more than 5 characters</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div ng-hide="data.address.businessAddress.useSameAddress">
+                <button type="button" class="btn btn-alt" ng-click="validateAddress('businessAddress')" ng-disabled="data.verifyCTADisable">
+                    Verify Address
+                </button>
+            </div>
+            <div class="row ">
+                <span class="span12 pull-left inline-block">
+                    <hr class="hr dark hr-marTopBtm30">
+                    <h2 class="heading-sub-section mTop30 mBottom0">Business type and officers</h2>
+                </span>
+            </div>
+            <div class="form-row">
+                <label for="businesstype">Business type </label>  <span  class="tooltip mTopMinus5 ng-scope" ddh-tooltip=""><a aria-describedby="tooltiptext" href="#" class="icon-tooltip tooltip-element" tabindex="0" role="button" data-placement="bottom" aria-label="" aria-expanded="true"><span class="arrow"></span></a>
+                <span class="tooltip-wrapper">
+                    <span  class="tooltip-size-control popover-content">
+                        <span id="tooltiptext" role="tooltip" aria-hidden="true" class="helpertext" tabindex="-1">Your business type, as registered with your Secretary of State. If your organization is a 501(c) non-profit, select Corporation or Limited Liability Corporation. Then, on the review page, enter “501c organization” in the comments field.
+                            <span class="popover-content">
+                                <span class="ng-binding"></span>
+                            </span>
+                        </span>
+                    </span>
+                </span>
+                </span>
+                <select id="businesstype" ddh-dropdown name="businesstype"
+                        ng-model="data.businessCreditInfo.businessEntity" ng-change="scrollTo(data.businessCreditInfo.businessEntity)" class="mTop5">
+                    <option ddh-dropdown-list option-repeat="bus_type in business_types" value="{{bus_type.value}}">{{bus_type.text}}
+                    </option>
+                </select>
+            </div>
+           <p class="p-small form-row">To complete your order, we need to run an industry-standard credit check or review your credit
+                information on
+                file with AT&T.
+            </p>
+            <div ng-switch="data.businessCreditInfo.businessEntity" id="business_entity_switch">
+                <div ng-switch-when="Corporation">
+                    <business-corporation></business-corporation>
+                </div>
+                <div ng-switch-when="LLC">
+                    <business-corporation></business-corporation>
+                </div>
+                <div ng-switch-when="partnership">
+                    <business-partnership></business-partnership>
+                    <br>
+                </div>
+                <div ng-switch-when="soleproprietorship">
+                    <business-partnership></business-partnership>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
